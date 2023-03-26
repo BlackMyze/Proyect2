@@ -1,7 +1,7 @@
 from Class.queue import LinkedQueue
 
 auxqueue = LinkedQueue()
-chars = ['X','O'] # Opciones de marcado en el tablero, para el jugador A y B respectivamente
+chars = ['O','X'] # Opciones de marcado en el tablero, para el jugador A y B respectivamente
 
 def Siguiente_Movimiento(tree, depth):
   """ Calcula uno de los mejores movimientos siguientes
