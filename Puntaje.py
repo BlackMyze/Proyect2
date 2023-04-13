@@ -15,6 +15,8 @@ def score(tree, depth=0):
     '''
     Funcion principal del codigo
     '''
+    
+     
 
     result = 0
 
@@ -30,40 +32,39 @@ def score(tree, depth=0):
 
         if not(result):
             # ~~~~ Analizando por fila ~~~~
-            if ( on_row(row, depth+1) ): result = (-1)**(depth); return result
+            if ( on_row(row, depth+1) ): result = (-1)**(depth);
             # ~~~~ Analizando por columna ~~~~
             elif ( on_row(np.matrix(tree.label).transpose().tolist()[num_row], depth) ):
-                return (-1)**(depth); break
+                result = (-1)**(depth);
 
             # ~~~~ diagonal principal ~~~~
             if ( row[num_row] == chars[depth%2] ): diag_p += ( 1/(len_row_tree+1) )
 
             # ~~~~ diagonal secundaria ~~~~
-            if (row[len_row_tree - num_row] == chars[depth%2] and result ==0): diag_s += ( 1/(len_row_tree+1) )
+            if (row[len_row_tree - num_row] == chars[depth%2]): diag_s += ( 1/(len_row_tree+1) )
 
 
     if ( diag_p == 1.0 and result == 0 ): result = (-1)**(depth)
     elif ( diag_s == 1.0 and result == 0): result = (-1)**(depth)
 
     # --------- Buscar cada <Siguiente_Movimiento> a el nodo --------
-
     for i in main(tree, depth):         # Recorrer cada 'Siguiente_Movimiento' de tree
         tree.branches.append(Tree(i))   # Agregar como hijo a cada 'Siguiente_Movimiento'
 
-    # -------- Recursion --------
+   # -------- Recursion --------
     for branch in tree.branches:        # Aplicar score a cada hijo de tree (recursion)
+
         if (depth%2==0):
-            #result = max(result,score(branch, depth+1))
-            print(result,score(branch, depth+1),depth)
+
+            #result = max(result,)
+            print(score(branch, depth+1),depth)
 
         else:
             #result = min(result,score(branch, depth+1))
-            print(result,score(branch, depth+1),depth)
+            print(score(branch, depth+1),depth)
 
-
+    
     return result
-
-
 
 
 # Aca inicia la prueba (Codigo principal)
@@ -71,10 +72,12 @@ def score(tree, depth=0):
 
 def prueba():
 
-    t = Tree([["O"," "," "],
-              ["O"," "," "],
-              ["O"," "," "]])
+    t = Tree([["X","O","X"],
+              ["O","X","O"],
+              [" "," "," "]])
 
     print(score(t))
+    #print(t)
+    #print(t, score(t))
 
 prueba()
