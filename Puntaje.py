@@ -32,10 +32,10 @@ def score(tree, depth=0):
 
         if not(result):
             # ~~~~ Analizando por fila ~~~~
-            if ( on_row(row, depth+1) ): result = (-1)**(depth);
+            if ( on_row(row, depth+1) ): return (-1)**(depth)
             # ~~~~ Analizando por columna ~~~~
-            elif ( on_row(np.matrix(tree.label).transpose().tolist()[num_row], depth) ):
-                result = (-1)**(depth);
+            elif ( on_row(np.matrix(tree.label).transpose().tolist()[num_row], depth+1) ):
+                return (-1)**(depth)
 
             # ~~~~ diagonal principal ~~~~
             if ( row[num_row] == chars[depth%2] ): diag_p += ( 1/(len_row_tree+1) )
@@ -44,39 +44,77 @@ def score(tree, depth=0):
             if (row[len_row_tree - num_row] == chars[depth%2]): diag_s += ( 1/(len_row_tree+1) )
 
 
-    if ( diag_p == 1.0 and result == 0 ): result = (-1)**(depth)
-    elif ( diag_s == 1.0 and result == 0): result = (-1)**(depth)
+    if ( diag_p == 1.0 and result == 0 ): return (-1)**(depth)
+    elif ( diag_s == 1.0 and result == 0): return (-1)**(depth)
 
     # --------- Buscar cada <Siguiente_Movimiento> a el nodo --------
     for i in main(tree, depth):         # Recorrer cada 'Siguiente_Movimiento' de tree
         tree.branches.append(Tree(i))   # Agregar como hijo a cada 'Siguiente_Movimiento'
 
-   # -------- Recursion --------
-    for branch in tree.branches:        # Aplicar score a cada hijo de tree (recursion)
+   # -------- Recursion 1 --------
+#    for branch in tree.branches:        # Aplicar score a cada hijo de tree (recursion)
 
-        if (depth%2==0):
+#        if (depth%2==0):
 
             #result = max(result,)
-            print(score(branch, depth+1),depth)
+#            print(score(branch, depth+1),depth)
 
-        else:
-            #result = min(result,score(branch, depth+1))
-            print(score(branch, depth+1),depth)
+#        else:
+#            #result = min(result,score(branch, depth+1))
+#            print(score(branch, depth+1),depth)
 
-    
-    return result
+   # -------- Recursion 2 --------
+#    temp = []
+#    if (depth%2==0):
+#        for branch in tree.branches:
+#            temp.append(score(branch, depth+1))
+            #if (branch.is_leaf()): return result
+            #else: print(depth, "max", temp) #print(temp, depth, "maximo")
+#            print(depth, temp, "maximo"); return max(temp)
+            
+#       return max(temp)
+
+#    else:
+#        for branch in tree.branches:
+#            temp.append(score(branch, depth+1))
+#            #if (branch.is_leaf()): return result
+#            #else: print(depth, "min", temp) #print(temp, depth, "maximo")
+#            print(depth, temp, "minimo")
+        #result = min(temp)
+
+
+   # -------- Recursion 3 --------
+    temp = []
+    for branch in tree.branches:
+        temp.append(score(branch, depth+1))
+        print(depth,temp)
+            
+    if(len(temp)): 
+        if(depth%2==0): return max(temp)
+        return min(temp)
+
+    else: return result
 
 
 # Aca inicia la prueba (Codigo principal)
 
 
 def prueba():
-
-    t = Tree([["X","O","X"],
-              ["O","X","O"],
+    
+    t = Tree([[" "," "," "],
+              [" "," "," "],
               [" "," "," "]])
 
-    print(score(t))
+    points = {"X":0, "O":0}
+    for i in range(len(t.label)):
+        for j in range(len(t.label)):
+            if t.label[i][j] == "X": points["X"] += 1
+            elif t.label[i][j] == "O": points["O"] += 1
+    
+    if points["X"] < points["O"]: 
+        print(score(t,1))
+    else: 
+        print(score(t))
     #print(t)
     #print(t, score(t))
 
